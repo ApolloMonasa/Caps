@@ -1,13 +1,4 @@
 {
-  "itemGroup.caps": "Example Mod Tab",
-  "block.caps.example_block": "Example Block",
-  "item.caps.example_item": "Example Item",
-
-  "caps.configuration.title": "Caps Configs",
-  "caps.configuration.section.caps.common.toml": "Caps Configs",
-  "caps.configuration.section.caps.common.toml.title": "Caps Configs",
-  "caps.configuration.items": "Item List",
-  "caps.configuration.logDirtBlock": "Log Dirt Block",
-  "caps.configuration.magicNumberIntroduction": "Magic Number Text",
-  "caps.configuration.magicNumber": "Magic Number"
+  "key.category.caps.default": "矿脉挖掘",
+  "key.caps.vein_mine": "连锁"
 }
