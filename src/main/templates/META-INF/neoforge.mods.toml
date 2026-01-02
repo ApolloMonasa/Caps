@@ -36,12 +36,13 @@ displayName="${mod_name}" #mandatory
 #credits="" #optional
 
 # The authors of the mod, displayed in the mod UI (optional)
-authors="Apollo"
+authors="Apollo(肖老师hhh)"
 
 # The description text for the mod (multi line!) (#mandatory)
 description='''
 连锁采集模组
 Simple Vein Mining Mod
+可以用于客户端，如果要用于服务端，则是一个Server-Only模组，只用在服务端安装即可
 
 MIT License
 '''
