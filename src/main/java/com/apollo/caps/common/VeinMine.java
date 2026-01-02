@@ -44,7 +44,7 @@ public class VeinMine {
                 drops.addAll(Block.getDrops(tgtState, level, tgtPos, tgtEntity, player, tool));
                 xp += tgtState.getExpDrop(level, tgtPos, tgtEntity, player, tool);
                 level.destroyBlock(tgtPos, false, player);
-                player.getMainHandItem().hurtAndBreak(1, level, player, (brokenItem) -> level.broadcastEntityEvent(player, (byte)47));
+                tool.hurtAndBreak(1, level, player, (brokenItem) -> level.broadcastEntityEvent(player, (byte)47));
                 count++;
             }
         }
