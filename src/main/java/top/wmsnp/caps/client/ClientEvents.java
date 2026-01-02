@@ -1,6 +1,6 @@
-package com.apollo.caps.client;
+package top.wmsnp.caps.client;
 
-import com.apollo.caps.network.VeinMinePacket;
+import top.wmsnp.caps.network.VeinMinePayload;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -10,6 +10,6 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 public class ClientEvents {
     @SubscribeEvent
     public static void onBlockBreak(BlockEvent.BreakEvent event) {
-        if (ModKeyBindings.VEIN_MINE.isDown()) VeinMinePacket.send(event.getPos(), event.getState());
+        if (ModKeyBindings.VEIN_MINE.isDown()) VeinMinePayload.send(event.getPos(), event.getState());
     }
 }

@@ -1,4 +1,4 @@
-package com.apollo.caps;
+package top.wmsnp.caps;
 
 import net.neoforged.fml.common.Mod;
 

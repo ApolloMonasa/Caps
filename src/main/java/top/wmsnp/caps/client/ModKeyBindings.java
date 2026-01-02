@@ -1,6 +1,6 @@
-package com.apollo.caps.client;
+package top.wmsnp.caps.client;
 
-import com.apollo.caps.Caps;
+import top.wmsnp.caps.Caps;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -17,4 +17,5 @@ public class ModKeyBindings {
     public static void registerBindings(RegisterKeyMappingsEvent event) {
         event.registerCategory(CATEGORY);
         event.register(VEIN_MINE);
-    }}
+    }
+}
