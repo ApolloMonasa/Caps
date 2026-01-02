@@ -6,22 +6,28 @@ import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import top.wmsnp.caps.client.renderer.VeinHighlightRenderer;
 import top.wmsnp.caps.common.VeinMine;
-import top.wmsnp.caps.network.VeinMinePayload;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.level.BlockEvent;
+import top.wmsnp.caps.network.VeinMinePayload;
 
 @EventBusSubscriber(modid = "caps", value = Dist.CLIENT)
 public class ClientEvents {
     private static final VeinHighlightRenderer renderer = new VeinHighlightRenderer();
+    private static boolean lastState = false;
 
     @SubscribeEvent
-    public static void onBlockBreak(BlockEvent.BreakEvent event) {
-        if (ModKeyBindings.VEIN_MINE.isDown()) VeinMinePayload.send(event.getPos(), event.getState());
+    public static void onClientTick(ClientTickEvent.Post event) {
+        boolean currentState = ModKeyBindings.VEIN_MINE.isDown();
+        if (currentState != lastState) {
+            lastState = currentState;
+            ClientPacketDistributor.sendToServer(new VeinMinePayload(currentState));
+        }
     }
 
     @SubscribeEvent

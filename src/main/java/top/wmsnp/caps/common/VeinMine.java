@@ -12,7 +12,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 public class VeinMine {
     private static final int MAX_BLOCKS = 64;
@@ -20,13 +19,9 @@ public class VeinMine {
     private static final int[] OFFSETS = {-1, 0, 1};
 
     public static class VeinMineResult {
-        public Consumer<ServerLevel> drops = level -> {};
+        public List<ItemStack> drops = new ArrayList<>();
         public final List<BlockPos> poss = new ArrayList<>();
         public int xp = 0;
-
-        public void addDrop(Consumer<ServerLevel> consumer) {
-            drops = drops.andThen(consumer);
-        }
     }
 
     public static VeinMineResult collectVeinBlocks(Player player, BlockPos startPos, BlockState state) {
@@ -50,14 +45,14 @@ public class VeinMine {
                 BlockEntity tgtEntity = level.getBlockEntity(tgtPos);
                 if (!player.hasCorrectToolForDrops(tgtState, level, tgtPos)) break outer;
                 if (visited.contains(tgtPos) || !tgtState.is(targetBlock)) continue;
-
                 visited.add(tgtPos);
                 queue.add(tgtPos);
                 result.poss.add(tgtPos);
                 ItemStack tool = player.getMainHandItem();
-                result.addDrop((serverLevel) -> Block.dropResources(tgtState, serverLevel, tgtPos, tgtEntity, player, tool));
-                result.xp += tgtState.getExpDrop(level, tgtPos, tgtEntity, player, tool);
                 count++;
+                if (!(level instanceof ServerLevel)) continue;
+                result.drops.addAll(Block.getDrops(tgtState, (ServerLevel) level, tgtPos, tgtEntity, player, tool));
+                result.xp += tgtState.getExpDrop(level, tgtPos, tgtEntity, player, tool);
             }
         }
         return result;
@@ -72,7 +67,7 @@ public class VeinMine {
             tool.hurtAndBreak(1, level, player, (brokenItem) -> level.broadcastEntityEvent(player, (byte) 47));
         });
         if (player.isCreative()) return;
-        result.drops.accept(level);
+        result.drops.forEach(drop -> Block.popResource(level, startPos, drop));
         ExperienceOrb.award(level, startPos.getCenter(), result.xp);
         player.causeFoodExhaustion(EXHAUSTION_PER_BLOCK * result.poss.size());
     }
