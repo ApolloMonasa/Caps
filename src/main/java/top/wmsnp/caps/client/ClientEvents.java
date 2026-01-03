@@ -37,7 +37,7 @@ public class ClientEvents {
         if (mc.player == null || hit == null || mc.level == null || !ModKeyBindings.VEIN_MINE.isDown()) return;
         BlockPos startPos = hit.getBlockPos();
         BlockState state = mc.level.getBlockState(startPos);
-        VeinMine.VeinMineResult result = VeinMine.collectVeinBlocks(mc.player, startPos, state);
+        VeinMine.VeinMineResult result = VeinMine.collectVeinBlocks(mc.player, startPos, state, false);
         if (result.poss.isEmpty()) return;
 
         PoseStack poseStack = event.getPoseStack();

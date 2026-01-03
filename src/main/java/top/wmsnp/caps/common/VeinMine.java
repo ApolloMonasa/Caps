@@ -24,7 +24,7 @@ public class VeinMine {
         public int xp = 0;
     }
 
-    public static VeinMineResult collectVeinBlocks(Player player, BlockPos startPos, BlockState state) {
+    public static VeinMineResult collectVeinBlocks(Player player, BlockPos startPos, BlockState state, boolean isBreak) {
         Level level = player.level();
         Block targetBlock = state.getBlock();
         VeinMineResult result = new VeinMineResult();
@@ -43,16 +43,20 @@ public class VeinMine {
                 BlockPos tgtPos = currentPos.offset(dx, dy, dz);
                 BlockState tgtState = level.getBlockState(tgtPos);
                 BlockEntity tgtEntity = level.getBlockEntity(tgtPos);
-                if (!player.hasCorrectToolForDrops(tgtState, level, tgtPos)) break outer;
                 if (visited.contains(tgtPos) || !tgtState.is(targetBlock)) continue;
+                if (!player.isCreative() && !player.hasCorrectToolForDrops(state, level, startPos)) break outer;
                 visited.add(tgtPos);
                 queue.add(tgtPos);
                 result.poss.add(tgtPos);
                 ItemStack tool = player.getMainHandItem();
                 count++;
-                if (!(level instanceof ServerLevel)) continue;
-                result.drops.addAll(Block.getDrops(tgtState, (ServerLevel) level, tgtPos, tgtEntity, player, tool));
-                result.xp += tgtState.getExpDrop(level, tgtPos, tgtEntity, player, tool);
+                if (isBreak && level instanceof ServerLevel serverLevel && player instanceof ServerPlayer serverPlayer) {
+                    level.destroyBlock(tgtPos, false, player);
+                    tool.hurtAndBreak(1, serverLevel, serverPlayer, (brokenItem) -> level.broadcastEntityEvent(player, (byte) 47));
+                    result.drops.addAll(Block.getDrops(tgtState, serverLevel, tgtPos, tgtEntity, player, tool));
+                    result.xp += tgtState.getExpDrop(level, tgtPos, tgtEntity, player, tool);
+                    player.causeFoodExhaustion(EXHAUSTION_PER_BLOCK);
+                }
             }
         }
         return result;
@@ -60,15 +64,9 @@ public class VeinMine {
 
     public static void veinMine(ServerPlayer player, BlockPos startPos, BlockState state) {
         ServerLevel level = player.level();
-        VeinMineResult result = collectVeinBlocks(player, startPos, state);
-        ItemStack tool = player.getMainHandItem();
-        result.poss.forEach(pos -> {
-            level.destroyBlock(pos, false, player);
-            tool.hurtAndBreak(1, level, player, (brokenItem) -> level.broadcastEntityEvent(player, (byte) 47));
-        });
+        VeinMineResult result = collectVeinBlocks(player, startPos, state, true);
         if (player.isCreative()) return;
-        result.drops.forEach(drop -> Block.popResource(level, startPos, drop));
         ExperienceOrb.award(level, startPos.getCenter(), result.xp);
-        player.causeFoodExhaustion(EXHAUSTION_PER_BLOCK * result.poss.size());
+        result.drops.forEach(drop -> Block.popResource(level, startPos, drop));
     }
 }

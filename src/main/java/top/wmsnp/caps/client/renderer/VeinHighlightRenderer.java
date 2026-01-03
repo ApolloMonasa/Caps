@@ -24,14 +24,11 @@ public class VeinHighlightRenderer {
     };
 
     public void render(PoseStack poseStack, CameraRenderState cameraState, MultiBufferSource bufferSource) {
-        Vec3 cameraPos = cameraState.pos;
-        RenderType renderType = RenderTypes.lines();
-        Set<Edge> edgesToRender = getEdgesToRender();
+        VertexConsumer builder = bufferSource.getBuffer(RenderTypes.lines());
 
-        VertexConsumer builder = bufferSource.getBuffer(renderType);
-        for (Edge edge : edgesToRender) {
-            Vec3 a = new Vec3(edge.a.getX(), edge.a.getY(), edge.a.getZ()).subtract(cameraPos);
-            Vec3 b = new Vec3(edge.b.getX(), edge.b.getY(), edge.b.getZ()).subtract(cameraPos);
+        for (Edge edge : getEdgesToRender()) {
+            Vec3 a = new Vec3(edge.a.getX(), edge.a.getY(), edge.a.getZ()).subtract(cameraState.pos);
+            Vec3 b = new Vec3(edge.b.getX(), edge.b.getY(), edge.b.getZ()).subtract(cameraState.pos);
 
             builder.addVertex(poseStack.last().pose(), (float)a.x(), (float)a.y(), (float)a.z())
                     .setColor(255, 255, 255, 255)
