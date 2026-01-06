@@ -7,10 +7,16 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.phys.BlockHitResult;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+import net.neoforged.neoforge.client.gui.ConfigurationScreen;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
+import top.wmsnp.caps.Caps;
 import top.wmsnp.caps.client.renderer.VeinHighlightRenderer;
 import top.wmsnp.caps.common.VeinMine;
 import net.neoforged.api.distmarker.Dist;
@@ -24,6 +30,12 @@ public class ClientEvents {
     private static final VeinHighlightRenderer renderer = new VeinHighlightRenderer();
     private static boolean lastState = false;
     private static BlockPos lastPos = null;
+
+    @SubscribeEvent
+    public static void onClientSetup(FMLClientSetupEvent event) {
+        ModContainer container = ModList.get().getModContainerById(Caps.MODID).get();
+        container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
+    }
 
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
