@@ -1,0 +1,52 @@
+name: Publish to GitHub Releases
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      - name: Upload to GitHub Releases
+        uses: Kira-NT/mc-publish@v3.3
+        with:
+          # --- GitHub 鉴权 ---
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+          # --- 文件匹配 ---
+          # 自动上传 jar，排除 sources 和 javadoc
+          files: build/libs/!(*-sources|*-javadoc).jar
+
+          # --- 版本信息 (动态获取) ---
+          # 标题显示为: Caps v1.0.0 (自动读取你的 Tag)
+          name: Caps ${{ github.ref_name }}
+
+          # 版本号: v1.0.0 (自动读取你的 Tag)
+          version: ${{ github.ref_name }}
+
+          # 版本类型: release (正式版)
+          version-type: release
+
+          # 简单的更新日志
+          changelog: "Caps ${{ github.ref_name }} released!"
