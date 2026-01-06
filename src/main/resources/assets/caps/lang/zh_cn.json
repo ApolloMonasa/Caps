@@ -1,4 +1,8 @@
 {
-  "key.category.caps.default": "矿脉挖掘",
-  "key.caps.vein_mine": "连锁"
+  "key.category.caps.default": "连锁采集",
+  "key.caps.vein_mine": "连锁",
+  "caps.gui.vein_mine_count": "连锁采集数量: %s",
+  "caps.command.server_max_vein_blocks": "已将服务器最大连锁限制修改为: %s",
+  "caps.config.max_vein_blocks": "最大连锁采集数",
+  "caps.config.server_max_vein_blocks": "服务端最大连锁采集数"
 }

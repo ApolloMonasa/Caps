@@ -14,7 +14,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.*;
 
 public class VeinMine {
-    private static final int MAX_BLOCKS = 64;
     private static final float EXHAUSTION_PER_BLOCK = 0.025F;
     private static final int[] OFFSETS = {-1, 0, 1};
 
@@ -24,7 +23,7 @@ public class VeinMine {
         public int xp = 0;
     }
 
-    public static VeinMineResult collectVeinBlocks(Player player, BlockPos startPos, BlockState state, boolean isBreak) {
+    public static VeinMineResult collect(Player player, BlockPos startPos, BlockState state, int max, boolean isBreak) {
         Level level = player.level();
         Block targetBlock = state.getBlock();
         VeinMineResult result = new VeinMineResult();
@@ -37,9 +36,10 @@ public class VeinMine {
 
         int count = 0;
         outer:
-        while (!queue.isEmpty() && count < MAX_BLOCKS) {
+        while (!queue.isEmpty() && count < max - 1) {
             BlockPos currentPos = queue.poll();
             for (int dx : OFFSETS) for (int dy : OFFSETS) for (int dz : OFFSETS) {
+                if (count >= max - 1) break outer;
                 BlockPos tgtPos = currentPos.offset(dx, dy, dz);
                 BlockState tgtState = level.getBlockState(tgtPos);
                 BlockEntity tgtEntity = level.getBlockEntity(tgtPos);
@@ -64,7 +64,8 @@ public class VeinMine {
 
     public static void veinMine(ServerPlayer player, BlockPos startPos, BlockState state) {
         ServerLevel level = player.level();
-        VeinMineResult result = collectVeinBlocks(player, startPos, state, true);
+        int min = Math.min(player.getPersistentData().getInt("vein_mine_max").orElse(64),  CapsConfig.SERVER_MAX_VEIN_BLOCKS.get());
+        VeinMineResult result = collect(player, startPos, state, min, true);
         if (player.isCreative()) return;
         ExperienceOrb.award(level, startPos.getCenter(), result.xp);
         result.drops.forEach(drop -> Block.popResource(level, startPos, drop));
