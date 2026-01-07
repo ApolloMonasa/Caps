@@ -16,6 +16,7 @@ public class CapsConfig {
     public static final ModConfigSpec.ConfigValue<Integer> MAX_VEIN_BLOCKS;
     public static final ModConfigSpec.ConfigValue<Integer> SERVER_MAX_VEIN_BLOCKS;
     public static final ModConfigSpec.EnumValue<@NonNull RenderMode> RENDER_MODE;
+    public static final ModConfigSpec.BooleanValue PARTICLES;
 
     public static final ModConfigSpec.ConfigValue<Integer> COLOR_R;
     public static final ModConfigSpec.ConfigValue<Integer> COLOR_G;
@@ -29,12 +30,15 @@ public class CapsConfig {
         MAX_VEIN_BLOCKS = CLIENT_BUILDER.defineInRange("max_vein_blocks", 64, 0, Caps.MAX_MAX_VEIN_BLOCKS);
 
         CLIENT_BUILDER.push("visuals");
-        RENDER_MODE = CLIENT_BUILDER.defineEnum("renderMode", RenderMode.FACE);
-        COLOR_R = CLIENT_BUILDER.comment("Red Component (0-255)").defineInRange("color_r", 255, 0, 255);
-        COLOR_G = CLIENT_BUILDER.comment("Green Component (0-255)").defineInRange("color_g", 255, 0, 255);
-        COLOR_B = CLIENT_BUILDER.comment("Blue Component (0-255)").defineInRange("color_b", 255, 0, 255);
-        COLOR_A = CLIENT_BUILDER.comment("Alpha/Transparency (0-255)").defineInRange("color_a", 200, 0, 255);
-        LINEWIDTH = CLIENT_BUILDER.comment("Thickness of the highlight lines (0.01 - 0.5)").defineInRange("linewidth", 10F, 1, 40);
+        RENDER_MODE = CLIENT_BUILDER.defineEnum("render_mode", RenderMode.FACE);
+        PARTICLES = CLIENT_BUILDER.define("particles", false);
+        CLIENT_BUILDER.push("color");
+        COLOR_R = CLIENT_BUILDER.defineInRange("color_r", 255, 0, 255);
+        COLOR_G = CLIENT_BUILDER.defineInRange("color_g", 255, 0, 255);
+        COLOR_B = CLIENT_BUILDER.defineInRange("color_b", 255, 0, 255);
+        COLOR_A = CLIENT_BUILDER.defineInRange("color_a", 200, 0, 255);
+        CLIENT_BUILDER.pop();
+        LINEWIDTH = CLIENT_BUILDER.defineInRange("linewidth", 10F, 1, 40);
         CLIENT_BUILDER.pop();
 
         SERVER = SERVER_BUILDER.build();

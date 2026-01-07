@@ -9,7 +9,7 @@ import top.wmsnp.caps.Caps;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import top.wmsnp.caps.client.gui.DynamicSectionScreen;
+import top.wmsnp.caps.client.gui.ConfigSectionScreen;
 
 
 @EventBusSubscriber(modid = Caps.MODID, value = Dist.CLIENT)
@@ -17,6 +17,6 @@ public class ClientEvents {
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
         ModContainer container = ModList.get().getModContainerById(Caps.MODID).orElseThrow();
-        container.registerExtensionPoint(IConfigScreenFactory.class, (modContainer, parent) -> new ConfigurationScreen(modContainer, parent, DynamicSectionScreen::new));
+        container.registerExtensionPoint(IConfigScreenFactory.class, (modContainer, parent) -> new ConfigurationScreen(modContainer, parent, ConfigSectionScreen::new));
     }
 }
