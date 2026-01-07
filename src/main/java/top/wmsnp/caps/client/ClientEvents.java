@@ -2,21 +2,21 @@ package top.wmsnp.caps.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
-import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import top.wmsnp.caps.Caps;
+import top.wmsnp.caps.client.gui.CapsColorScreen;
 import top.wmsnp.caps.client.renderer.VeinHighlightRenderer;
 import top.wmsnp.caps.common.VeinMine;
 import net.neoforged.api.distmarker.Dist;
@@ -34,7 +34,7 @@ public class ClientEvents {
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
         ModContainer container = ModList.get().getModContainerById(Caps.MODID).get();
-        container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
+        container.registerExtensionPoint(IConfigScreenFactory.class, (mc, screen) -> new CapsColorScreen(screen));
     }
 
     @SubscribeEvent
@@ -80,8 +80,9 @@ public class ClientEvents {
             VeinHighlightRenderer.blocks.addAll(result.poss);
         }
         if (VeinHighlightRenderer.blocks.size() <= 1) return;
-        CameraRenderState cameraState = new CameraRenderState();
-        cameraState.pos = mc.gameRenderer.getMainCamera().position();
-        renderer.render(event.getPoseStack(), cameraState, mc.renderBuffers().bufferSource());
+
+        Vec3 cameraPos = mc.gameRenderer.getMainCamera().position();
+        // 将坐标传给渲染器
+        renderer.render(event.getPoseStack(), cameraPos, mc.renderBuffers().bufferSource());
     }
 }
