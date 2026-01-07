@@ -8,7 +8,7 @@
   "caps.configuration.visuals": "Visual Settings",
   "caps.configuration.color": "Color Settings",
   "caps.configuration.render_mode": "Render Mode",
-  "caps.configuration.render_mode.None": "None",
+  "caps.configuration.render_mode.NONE": "None",
   "caps.configuration.render_mode.FACE": "Face",
   "caps.configuration.render_mode.OUTLINE": "Outline",
   "caps.configuration.linewidth": "Outline Width",

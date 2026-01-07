@@ -38,6 +38,7 @@ public class VeinMineEvents {
     public static void onRenderGui(RenderGuiEvent.Post event) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || mc.level == null || !ModKeyBindings.VEIN_MINE.isDown()) return;
+        if (last == null) return;
         int count = last.poss.size();
         if (count == 0) return;
         MutableComponent text = Component.translatable("caps.gui.vein_mine_count", count);

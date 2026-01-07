@@ -8,7 +8,7 @@
   "caps.configuration.visuals": "视觉设置",
   "caps.configuration.color": "颜色设置",
   "caps.configuration.render_mode": "渲染模式",
-  "caps.configuration.render_mode.None": "无",
+  "caps.configuration.render_mode.NONE": "无",
   "caps.configuration.render_mode.FACE": "面",
   "caps.configuration.render_mode.OUTLINE": "边框",
   "caps.configuration.linewidth": "边框线宽",

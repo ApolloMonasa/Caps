@@ -4,12 +4,11 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.CommonComponents; // 引入通用组件(Done/Cancel)
 import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.client.gui.widget.ExtendedSlider;
-import net.neoforged.neoforge.common.ModConfigSpec;
 import org.jspecify.annotations.NonNull;
 import top.wmsnp.caps.common.CapsConfig;
-import top.wmsnp.caps.utils.TypeUtils;
 
 import java.awt.Color;
 
@@ -23,84 +22,61 @@ public class CapsColorScreen extends Screen {
             0x55FFFF, 0x5555FF, 0xFF55FF, 0xAA0000
     };
 
+    // 核心变量
     private int r, g, b, a;
-    private double thickness;
 
-    private ExtendedSlider rSlider;
-    private ExtendedSlider gSlider;
-    private ExtendedSlider bSlider;
-    private EditBox rBox, gBox, bBox;
+    // 组件引用
+    private ExtendedSlider rSlider, gSlider, bSlider, aSlider;
+    private EditBox rBox, gBox, bBox, aBox;
+
+    // 防止循环触发的锁
     private boolean isUpdating = false;
 
     public CapsColorScreen(Screen lastScreen) {
         super(Component.translatable("caps.gui.title"));
         this.lastScreen = lastScreen;
+        // 初始化读取配置
         this.r = CapsConfig.COLOR_R.get();
         this.g = CapsConfig.COLOR_G.get();
         this.b = CapsConfig.COLOR_B.get();
         this.a = CapsConfig.COLOR_A.get();
-        this.thickness = CapsConfig.LINEWIDTH.get();
     }
 
     @Override
     protected void init() {
         int midX = this.width / 2;
-        // 1. 将起始高度由 40 改为 30，给下面腾出更多空间
+        // 整体上移：从 Y=30 开始布局
         int startY = 30;
 
-        // RGB 滑块起始位置
-        int rgbStartY = startY + 25;
+        // --- 1. ARGB Sliders & Boxes ---
+        // 依次排列 R, G, B, A 四行
 
-        // --- 2. RGB Sliders ---
-        rSlider = new ExtendedSlider(midX - 100, rgbStartY, 150, 20, Component.literal("R: "), Component.empty(), 0, 255, r, 1.0, 0, true) {
-            @Override
-            protected void applyValue() { if (!isUpdating) { r = this.getValueInt(); updateBoxesFromSliders(); } }
-        };
-        gSlider = new ExtendedSlider(midX - 100, rgbStartY + 25, 150, 20, Component.literal("G: "), Component.empty(), 0, 255, g, 1.0, 0, true) {
-            @Override
-            protected void applyValue() { if (!isUpdating) { g = this.getValueInt(); updateBoxesFromSliders(); } }
-        };
-        bSlider = new ExtendedSlider(midX - 100, rgbStartY + 50, 150, 20, Component.literal("B: "), Component.empty(), 0, 255, b, 1.0, 0, true) {
-            @Override
-            protected void applyValue() { if (!isUpdating) { b = this.getValueInt(); updateBoxesFromSliders(); } }
-        };
+        // Red
+        rSlider = createSlider(midX - 100, startY, "R: ", r, val -> { r = val; updateBoxesFromSliders(); });
+        rBox = createEditBox(midX + 60, startY, "R", r, val -> { r = val; updateSlidersFromBoxes(); });
 
-        this.addRenderableWidget(rSlider);
-        this.addRenderableWidget(gSlider);
-        this.addRenderableWidget(bSlider);
+        // Green
+        gSlider = createSlider(midX - 100, startY + 25, "G: ", g, val -> { g = val; updateBoxesFromSliders(); });
+        gBox = createEditBox(midX + 60, startY + 25, "G", g, val -> { g = val; updateSlidersFromBoxes(); });
 
-        // --- 3. Input Boxes ---
-        rBox = new EditBox(this.font, midX + 60, rgbStartY, 40, 20, Component.literal("R"));
-        gBox = new EditBox(this.font, midX + 60, rgbStartY + 25, 40, 20, Component.literal("G"));
-        bBox = new EditBox(this.font, midX + 60, rgbStartY + 50, 40, 20, Component.literal("B"));
+        // Blue
+        bSlider = createSlider(midX - 100, startY + 50, "B: ", b, val -> { b = val; updateBoxesFromSliders(); });
+        bBox = createEditBox(midX + 60, startY + 50, "B", b, val -> { b = val; updateSlidersFromBoxes(); });
 
-        updateBoxesFromSliders();
+        // Alpha (新增)
+        aSlider = createSlider(midX - 100, startY + 75, "A: ", a, val -> { a = val; updateBoxesFromSliders(); });
+        aBox = createEditBox(midX + 60, startY + 75, "A", a, val -> { a = val; updateSlidersFromBoxes(); });
 
-        rBox.setResponder(s -> tryParse(s, val -> { r = val; updateSlidersFromBoxes(); }));
-        gBox.setResponder(s -> tryParse(s, val -> { g = val; updateSlidersFromBoxes(); }));
-        bBox.setResponder(s -> tryParse(s, val -> { b = val; updateSlidersFromBoxes(); }));
+        // 添加 ARGB 组件到屏幕
+        this.addRenderableWidget(rSlider); this.addRenderableWidget(rBox);
+        this.addRenderableWidget(gSlider); this.addRenderableWidget(gBox);
+        this.addRenderableWidget(bSlider); this.addRenderableWidget(bBox);
+        this.addRenderableWidget(aSlider); this.addRenderableWidget(aBox);
 
-        this.addRenderableWidget(rBox);
-        this.addRenderableWidget(gBox);
-        this.addRenderableWidget(bBox);
-
-        // --- 4. Thickness Slider ---
-        // 放在 RGB 下方 80 像素处
-        int thicknessY = rgbStartY + 80;
-        ModConfigSpec.Range<@NonNull Double> thicknessRange = TypeUtils.getRange(CapsConfig.LINEWIDTH.getSpec(), Double.class);
-        ExtendedSlider thicknessSlider = new ExtendedSlider(midX - 100, thicknessY, 200, 20, Component.literal("Thickness: "), Component.empty(), thicknessRange.getMin(), thicknessRange.getMax(), thickness, 0.01, 2, true) {
-            @Override
-            protected void applyValue() {
-                if (!isUpdating) thickness = this.getValue();
-            }
-        };
-        this.addRenderableWidget(thicknessSlider);
-
-
-        // --- 5. Palette (调色板) ---
-        // 放在 Thickness 下方 30 像素处
+        // --- 2. Palette (调色板) ---
+        // 紧接着 Alpha 下方
         int pX = midX - 100;
-        int pY = thicknessY + 30;
+        int pY = startY + 110;
 
         for (int i = 0; i < PALETTE.length; i++) {
             int color = PALETTE[i];
@@ -112,27 +88,71 @@ public class CapsColorScreen extends Screen {
                 this.r = c.getRed();
                 this.g = c.getGreen();
                 this.b = c.getBlue();
+                this.a = 255; // 调色板默认不透明
                 refreshAllWidgets();
             }).bounds(colX, colY, 20, 20).build();
 
             this.addRenderableWidget(btn);
         }
 
-        // --- 6. Save & Exit ---
-        int saveBtnY = pY + 50 + 10;
+        // --- 3. Standard Buttons (底部按钮栏) ---
+        // 计算按钮行的 Y 坐标：调色板下方 60px 处
+        int btnY = pY + 60;
+        int btnWidth = 60;
+        int spacing = 10;
 
-        this.addRenderableWidget(Button.builder(Component.literal("Save & Close"), b -> onClose())
-                .bounds(midX - 50, saveBtnY, 100, 20).build());
+        // 布局： [Cancel]  [Reset]  [Done]
+        // 总宽度 = 60*3 + 10*2 = 200，刚好居中
+
+        // Cancel (取消) - 直接返回上一屏，不保存
+        this.addRenderableWidget(Button.builder(CommonComponents.GUI_CANCEL, b -> {
+            this.minecraft.setScreen(lastScreen);
+        }).bounds(midX - 100, btnY, btnWidth, 20).build());
+
+        // Reset (重置) - 重置为默认白色
+        this.addRenderableWidget(Button.builder(Component.translatable("controls.reset"), b -> {
+            this.r = 255; this.g = 255; this.b = 255; this.a = 255;
+            refreshAllWidgets();
+        }).bounds(midX - 30, btnY, btnWidth, 20).build());
+
+        // Done (完成) - 保存并退出
+        this.addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, b -> {
+            saveChanges();
+            this.minecraft.setScreen(lastScreen);
+        }).bounds(midX + 40, btnY, btnWidth, 20).build());
     }
+
+    // --- 辅助构建方法 (减少重复代码) ---
+
+    private ExtendedSlider createSlider(int x, int y, String prefix, int currentVal, java.util.function.IntConsumer action) {
+        return new ExtendedSlider(x, y, 150, 20, Component.literal(prefix), Component.empty(), 0, 255, currentVal, 1.0, 0, true) {
+            @Override
+            protected void applyValue() {
+                if (!isUpdating) action.accept(this.getValueInt());
+            }
+        };
+    }
+
+    private EditBox createEditBox(int x, int y, String label, int currentVal, java.util.function.IntConsumer action) {
+        EditBox box = new EditBox(this.font, x, y, 40, 20, Component.literal(label));
+        box.setValue(String.valueOf(currentVal));
+        box.setResponder(s -> tryParse(s, action));
+        return box;
+    }
+
+    // --- 逻辑刷新方法 ---
 
     private void refreshAllWidgets() {
         isUpdating = true;
         if (rSlider != null) rSlider.setValue(r);
         if (gSlider != null) gSlider.setValue(g);
         if (bSlider != null) bSlider.setValue(b);
+        if (aSlider != null) aSlider.setValue(a);
+
         updateBoxText(rBox, r);
         updateBoxText(gBox, g);
         updateBoxText(bBox, b);
+        updateBoxText(aBox, a);
         isUpdating = false;
     }
 
@@ -142,6 +162,7 @@ public class CapsColorScreen extends Screen {
         updateBoxText(rBox, r);
         updateBoxText(gBox, g);
         updateBoxText(bBox, b);
+        updateBoxText(aBox, a);
         isUpdating = false;
     }
 
@@ -151,6 +172,7 @@ public class CapsColorScreen extends Screen {
         if (rSlider != null) rSlider.setValue(r);
         if (gSlider != null) gSlider.setValue(g);
         if (bSlider != null) bSlider.setValue(b);
+        if (aSlider != null) aSlider.setValue(a);
         isUpdating = false;
     }
 
@@ -169,29 +191,42 @@ public class CapsColorScreen extends Screen {
         } catch (NumberFormatException ignored) {}
     }
 
+    private void saveChanges() {
+        CapsConfig.COLOR_R.set(r);
+        CapsConfig.COLOR_G.set(g);
+        CapsConfig.COLOR_B.set(b);
+        CapsConfig.COLOR_A.set(a); // 保存 Alpha
+        CapsConfig.CLIENT.save();
+    }
+
     @Override
     public void render(@NonNull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.render(graphics, mouseX, mouseY, partialTick);
 
-        graphics.drawCenteredString(this.font, this.title, this.width / 2, 10, 0xFFFFFF); // 标题也稍微往上挪一点
+        // 绘制标题 (稍微上移)
+        graphics.drawCenteredString(this.font, this.title, this.width / 2, 10, 0xFFFFFF);
 
-        // 重新计算坐标以确保预览色块和调色板色块位置正确
+        // 计算坐标 (必须与 init 保持一致)
         int midX = this.width / 2;
-        int startY = 30; // 必须和 init() 保持一致
-        int rgbStartY = startY + 25;
-        int thicknessY = rgbStartY + 80;
-        int pY = thicknessY + 30; // 必须和 init() 保持一致
+        int startY = 30;
+        // 预览框位置 (在滑块右侧)
+        // 从 R 滑块(startY) 到 A 滑块(startY+75) 覆盖的高度
 
-        // 颜色预览 (在右侧)
-        int previewColor = (255 << 24) | (r << 16) | (g << 8) | b;
-        graphics.fill(midX + 110, rgbStartY, midX + 150, rgbStartY + 40, previewColor);
-        graphics.drawCenteredString(this.font, "Preview", midX + 130, rgbStartY + 45, 0xFFFFFF);
+        // 组合 ARGB 颜色
+        int previewColor = (a << 24) | (r << 16) | (g << 8) | b;
 
-        // 手动绘制调色板颜色块 (覆盖在按钮之上作为显示)
+        // 绘制预览框 (位置在右侧空地)
+        // X: midX + 110, Y: startY + 15 (居中对齐RGB区域)
+        graphics.fill(midX + 110, startY + 20, midX + 150, startY + 60, previewColor);
+        graphics.drawCenteredString(this.font, "Preview", midX + 130, startY + 65, 0xFFFFFF);
+
+        // 绘制调色板色块
         int pX = midX - 100;
+        int pY = startY + 110;
         for (int i = 0; i < PALETTE.length; i++) {
             int colX = pX + (i % 6) * 25;
             int colY = pY + (i / 6) * 25;
+            // 调色板显示为不透明
             int color = PALETTE[i] | 0xFF000000;
             graphics.fill(colX + 2, colY + 2, colX + 18, colY + 18, color);
         }
@@ -199,13 +234,7 @@ public class CapsColorScreen extends Screen {
 
     @Override
     public void onClose() {
-        CapsConfig.COLOR_R.set(r);
-        CapsConfig.COLOR_G.set(g);
-        CapsConfig.COLOR_B.set(b);
-        CapsConfig.COLOR_A.set(a);
-        CapsConfig.LINEWIDTH.set(thickness);
-        CapsConfig.CLIENT.save();
-
+        // 按 ESC 时的默认行为：视为“取消”，不保存直接退出
         this.minecraft.setScreen(lastScreen);
     }
 }
