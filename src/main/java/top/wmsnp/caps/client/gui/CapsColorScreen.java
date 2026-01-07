@@ -6,8 +6,10 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.client.gui.widget.ExtendedSlider;
-import top.wmsnp.caps.Caps;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import org.jspecify.annotations.NonNull;
 import top.wmsnp.caps.common.CapsConfig;
+import top.wmsnp.caps.utils.TypeUtils;
 
 import java.awt.Color;
 
@@ -23,9 +25,10 @@ public class CapsColorScreen extends Screen {
 
     private int r, g, b, a;
     private double thickness;
-    private int maxVeinBlocks;
 
-    private ExtendedSlider rSlider, gSlider, bSlider, thicknessSlider, maxBlockSlider;
+    private ExtendedSlider rSlider;
+    private ExtendedSlider gSlider;
+    private ExtendedSlider bSlider;
     private EditBox rBox, gBox, bBox;
     private boolean isUpdating = false;
 
@@ -36,8 +39,7 @@ public class CapsColorScreen extends Screen {
         this.g = CapsConfig.COLOR_G.get();
         this.b = CapsConfig.COLOR_B.get();
         this.a = CapsConfig.COLOR_A.get();
-        this.thickness = CapsConfig.LINE_THICKNESS.get();
-        this.maxVeinBlocks = CapsConfig.MAX_VEIN_BLOCKS.get();
+        this.thickness = CapsConfig.LINEWIDTH.get();
     }
 
     @Override
@@ -45,18 +47,6 @@ public class CapsColorScreen extends Screen {
         int midX = this.width / 2;
         // 1. 将起始高度由 40 改为 30，给下面腾出更多空间
         int startY = 30;
-
-        // --- 1. Max Vein Blocks Slider ---
-        maxBlockSlider = new ExtendedSlider(
-                midX - 100, startY, 200, 20,
-                Component.literal("Max Blocks: "), Component.empty(),
-                0, Caps.MAX_MAX_VEIN_BLOCKS,
-                maxVeinBlocks, 1.0, 0, true
-        ) {
-            @Override
-            protected void applyValue() { if (!isUpdating) maxVeinBlocks = this.getValueInt(); }
-        };
-        this.addRenderableWidget(maxBlockSlider);
 
         // RGB 滑块起始位置
         int rgbStartY = startY + 25;
@@ -97,11 +87,15 @@ public class CapsColorScreen extends Screen {
         // --- 4. Thickness Slider ---
         // 放在 RGB 下方 80 像素处
         int thicknessY = rgbStartY + 80;
-        thicknessSlider = new ExtendedSlider(midX - 100, thicknessY, 200, 20, Component.literal("Thickness: "), Component.empty(), 0.01, 0.5, thickness, 0.01, 2, true) {
+        ModConfigSpec.Range<@NonNull Double> thicknessRange = TypeUtils.getRange(CapsConfig.LINEWIDTH.getSpec(), Double.class);
+        ExtendedSlider thicknessSlider = new ExtendedSlider(midX - 100, thicknessY, 200, 20, Component.literal("Thickness: "), Component.empty(), thicknessRange.getMin(), thicknessRange.getMax(), thickness, 0.01, 2, true) {
             @Override
-            protected void applyValue() { if (!isUpdating) thickness = this.getValue(); }
+            protected void applyValue() {
+                if (!isUpdating) thickness = this.getValue();
+            }
         };
         this.addRenderableWidget(thicknessSlider);
+
 
         // --- 5. Palette (调色板) ---
         // 放在 Thickness 下方 30 像素处
@@ -209,14 +203,9 @@ public class CapsColorScreen extends Screen {
         CapsConfig.COLOR_G.set(g);
         CapsConfig.COLOR_B.set(b);
         CapsConfig.COLOR_A.set(a);
-        CapsConfig.LINE_THICKNESS.set(thickness);
+        CapsConfig.LINEWIDTH.set(thickness);
         CapsConfig.CLIENT.save();
 
-        CapsConfig.MAX_VEIN_BLOCKS.set(maxVeinBlocks);
-        CapsConfig.COMMON.save();
-
-        if (this.minecraft != null) {
-            this.minecraft.setScreen(lastScreen);
-        }
+        this.minecraft.setScreen(lastScreen);
     }
 }

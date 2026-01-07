@@ -3,6 +3,8 @@
   "key.caps.vein_mine": "Vein",
   "caps.gui.vein_mine_count": "Vein Mine Count: %s",
   "caps.command.server_max_vein_blocks": "Server max vein blocks set to: %s",
-  "caps.config.max_vein_blocks": "Max Vein Blocks",
-  "caps.config.server_max_vein_blocks": "Server Max Vein Blocks"
+  "caps.configuration.max_vein_blocks": "Max Vein Blocks",
+  "caps.configuration.server_max_vein_blocks": "Server Max Vein Blocks",
+  "caps.configuration.visuals": "视觉设置",
+  "caps.configuration.render_mode": "渲染模式"
 }

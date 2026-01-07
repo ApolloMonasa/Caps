@@ -18,15 +18,21 @@ public class VeinMine {
     private static final int[] OFFSETS = {-1, 0, 1};
 
     public static class VeinMineResult {
+        public final BlockPos startPos;
         public List<ItemStack> drops = new ArrayList<>();
         public final List<BlockPos> poss = new ArrayList<>();
         public int xp = 0;
+
+        public VeinMineResult(BlockPos startPos){
+            super();
+            this.startPos = startPos;
+        }
     }
 
     public static VeinMineResult collect(Player player, BlockPos startPos, BlockState state, int max, boolean isBreak) {
         Level level = player.level();
         Block targetBlock = state.getBlock();
-        VeinMineResult result = new VeinMineResult();
+        VeinMineResult result = new VeinMineResult(startPos);
         if (state.isAir() || state.getFluidState().isSource()) return result;
 
         Queue<BlockPos> queue = new LinkedList<>();
@@ -59,6 +65,7 @@ public class VeinMine {
                 }
             }
         }
+        result.poss.add(startPos);
         return result;
     }
 
