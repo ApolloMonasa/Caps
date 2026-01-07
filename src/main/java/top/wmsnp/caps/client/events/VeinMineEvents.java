@@ -15,15 +15,13 @@ import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import top.wmsnp.caps.Caps;
 import top.wmsnp.caps.client.ModKeyBindings;
-import top.wmsnp.caps.client.renderer.VeinFaceRenderer;
-import top.wmsnp.caps.client.renderer.VeinLineRenderer;
+import top.wmsnp.caps.client.renderer.VeinRenderer;
 import top.wmsnp.caps.common.CapsConfig;
 import top.wmsnp.caps.common.VeinMine;
 import top.wmsnp.caps.network.VeinMinePayload;
 
 @EventBusSubscriber(modid = Caps.MODID, value = Dist.CLIENT)
 public class VeinMineEvents {
-    private static final VeinFaceRenderer renderer = new VeinFaceRenderer();
     private static boolean lastState = false;
     public static VeinMine.VeinMineResult last = null;
 
@@ -53,6 +51,8 @@ public class VeinMineEvents {
 
     @SubscribeEvent
     public static void onRenderWorldLast(RenderLevelStageEvent.AfterOpaqueBlocks event) {
+        VeinRenderer renderer = CapsConfig.RENDER_MODE.get().getRenderer();
+        if (renderer == null) return;
         Minecraft mc = Minecraft.getInstance();
         BlockHitResult hit = mc.hitResult instanceof BlockHitResult bhr ? bhr : null;
         if (mc.player == null || hit == null || mc.level == null || !ModKeyBindings.VEIN_MINE.isDown()) {

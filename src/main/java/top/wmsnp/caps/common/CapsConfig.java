@@ -29,7 +29,7 @@ public class CapsConfig {
         MAX_VEIN_BLOCKS = CLIENT_BUILDER.defineInRange("max_vein_blocks", 64, 0, Caps.MAX_MAX_VEIN_BLOCKS);
 
         CLIENT_BUILDER.push("visuals");
-        RENDER_MODE = CLIENT_BUILDER.defineEnum("renderMode", RenderMode.OUTLINE);
+        RENDER_MODE = CLIENT_BUILDER.defineEnum("renderMode", RenderMode.FACE);
         COLOR_R = CLIENT_BUILDER.comment("Red Component (0-255)").defineInRange("color_r", 255, 0, 255);
         COLOR_G = CLIENT_BUILDER.comment("Green Component (0-255)").defineInRange("color_g", 255, 0, 255);
         COLOR_B = CLIENT_BUILDER.comment("Blue Component (0-255)").defineInRange("color_b", 255, 0, 255);
