@@ -15,13 +15,20 @@ import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import top.wmsnp.caps.Caps;
 import top.wmsnp.caps.client.ModKeyBindings;
-import top.wmsnp.caps.client.renderer.VeinRenderer;
-import top.wmsnp.caps.common.CapsConfig;
+import top.wmsnp.caps.client.renderer.IVeinRenderer;
+import top.wmsnp.caps.client.renderer.RenderMode;
+import top.wmsnp.caps.client.renderer.VeinFaceRenderer;
+import top.wmsnp.caps.client.renderer.VeinLineRenderer;
+import top.wmsnp.caps.common.ClientConfig;
 import top.wmsnp.caps.common.VeinMine;
 import top.wmsnp.caps.network.VeinMinePayload;
+import top.wmsnp.caps.common.ServerConfig;
+
+import java.util.Map;
 
 @EventBusSubscriber(modid = Caps.MODID, value = Dist.CLIENT)
 public class VeinMineEvents {
+    private static final Map<RenderMode, IVeinRenderer> RENDERERS = Map.of(RenderMode.OUTLINE, new VeinLineRenderer(), RenderMode.FACE, new VeinFaceRenderer());
     private static boolean lastState = false;
     public static VeinMine.VeinMineResult last = null;
 
@@ -30,7 +37,7 @@ public class VeinMineEvents {
         boolean currentState = ModKeyBindings.VEIN_MINE.isDown();
         if (currentState != lastState) {
             lastState = currentState;
-            ClientPacketDistributor.sendToServer(new VeinMinePayload(currentState, CapsConfig.MAX_VEIN_BLOCKS.get()));
+            ClientPacketDistributor.sendToServer(new VeinMinePayload(currentState, ClientConfig.MAX_VEIN_BLOCKS.get()));
         }
     }
 
@@ -52,7 +59,7 @@ public class VeinMineEvents {
 
     @SubscribeEvent
     public static void onRenderWorldLast(RenderLevelStageEvent.AfterOpaqueBlocks event) {
-        VeinRenderer renderer = CapsConfig.RENDER_MODE.get().getRenderer();
+        IVeinRenderer renderer = RENDERERS.get(ClientConfig.RENDER_MODE.get());
         if (renderer == null) return;
         Minecraft mc = Minecraft.getInstance();
         BlockHitResult hit = mc.hitResult instanceof BlockHitResult bhr ? bhr : null;
@@ -62,7 +69,7 @@ public class VeinMineEvents {
         }
         BlockPos pos = hit.getBlockPos();
         if (last == null || !pos.equals(last.startPos)) {
-            int min = Math.min(CapsConfig.MAX_VEIN_BLOCKS.get(), CapsConfig.SERVER_MAX_VEIN_BLOCKS.get());
+            int min = Math.min(ClientConfig.MAX_VEIN_BLOCKS.get(), ServerConfig.SERVER_MAX_VEIN_BLOCKS.get());
             last = VeinMine.collect(mc.player, pos, mc.level.getBlockState(pos), min, false);
         }
         if (last.poss.size() <= 1) return;

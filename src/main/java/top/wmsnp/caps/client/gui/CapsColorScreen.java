@@ -8,7 +8,7 @@ import net.minecraft.network.chat.CommonComponents; // 引入通用组件(Done/C
 import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.client.gui.widget.ExtendedSlider;
 import org.jspecify.annotations.NonNull;
-import top.wmsnp.caps.common.CapsConfig;
+import top.wmsnp.caps.common.ClientConfig;
 
 import java.awt.Color;
 
@@ -36,10 +36,10 @@ public class CapsColorScreen extends Screen {
         super(Component.translatable("caps.gui.title"));
         this.lastScreen = lastScreen;
         // 初始化读取配置
-        this.r = CapsConfig.COLOR_R.get();
-        this.g = CapsConfig.COLOR_G.get();
-        this.b = CapsConfig.COLOR_B.get();
-        this.a = CapsConfig.COLOR_A.get();
+        this.r = ClientConfig.COLOR_R.get();
+        this.g = ClientConfig.COLOR_G.get();
+        this.b = ClientConfig.COLOR_B.get();
+        this.a = ClientConfig.COLOR_A.get();
     }
 
     @Override
@@ -88,7 +88,7 @@ public class CapsColorScreen extends Screen {
                 this.r = c.getRed();
                 this.g = c.getGreen();
                 this.b = c.getBlue();
-                this.a = CapsConfig.COLOR_A.getDefault(); // 调色板默认不透明
+                this.a = ClientConfig.COLOR_A.getDefault(); // 调色板默认不透明
                 refreshAllWidgets();
             }).bounds(colX, colY, 20, 20).build();
 
@@ -111,10 +111,10 @@ public class CapsColorScreen extends Screen {
 
         // Reset (重置) - 重置为默认白色
         this.addRenderableWidget(Button.builder(Component.translatable("controls.reset"), b -> {
-            this.r = CapsConfig.COLOR_R.getDefault();
-            this.g = CapsConfig.COLOR_G.getDefault();
-            this.b = CapsConfig.COLOR_B.getDefault();
-            this.a = CapsConfig.COLOR_A.getDefault();
+            this.r = ClientConfig.COLOR_R.getDefault();
+            this.g = ClientConfig.COLOR_G.getDefault();
+            this.b = ClientConfig.COLOR_B.getDefault();
+            this.a = ClientConfig.COLOR_A.getDefault();
             refreshAllWidgets();
         }).bounds(midX - 30, btnY, btnWidth, 20).build());
 
@@ -195,11 +195,11 @@ public class CapsColorScreen extends Screen {
     }
 
     private void saveChanges() {
-        CapsConfig.COLOR_R.set(r);
-        CapsConfig.COLOR_G.set(g);
-        CapsConfig.COLOR_B.set(b);
-        CapsConfig.COLOR_A.set(a); // 保存 Alpha
-        CapsConfig.CLIENT.save();
+        ClientConfig.COLOR_R.set(r);
+        ClientConfig.COLOR_G.set(g);
+        ClientConfig.COLOR_B.set(b);
+        ClientConfig.COLOR_A.set(a); // 保存 Alpha
+        ClientConfig.SPEC.save();
     }
 
     @Override

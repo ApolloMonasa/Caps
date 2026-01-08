@@ -2,7 +2,9 @@ package top.wmsnp.caps;
 
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
-import top.wmsnp.caps.common.CapsConfig;
+import net.neoforged.fml.config.ModConfig;
+import top.wmsnp.caps.common.ClientConfig;
+import top.wmsnp.caps.common.ServerConfig;
 
 @Mod("caps")
 public class Caps {
@@ -10,6 +12,7 @@ public class Caps {
     public static final int MAX_MAX_VEIN_BLOCKS = 1024;
 
     public Caps(ModContainer container) {
-        CapsConfig.register(container);
+        container.registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC);
+        container.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
     }
 }

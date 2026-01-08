@@ -13,7 +13,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 
-public class VeinFaceRenderer implements VeinRenderer {
+public class VeinFaceRenderer implements IVeinRenderer {
     @Override
     public void render(List<BlockPos> blocks, PoseStack poseStack, Vec3 cameraPos, MultiBufferSource bufferSource) {
         Level level = Minecraft.getInstance().level;

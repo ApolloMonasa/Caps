@@ -10,7 +10,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import top.wmsnp.caps.Caps;
-import top.wmsnp.caps.common.CapsConfig;
+import top.wmsnp.caps.common.ServerConfig;
 
 @EventBusSubscriber(modid = "caps")
 public class ModCommands {
@@ -23,8 +23,8 @@ public class ModCommands {
                         .then(Commands.argument("value", IntegerArgumentType.integer(0, Caps.MAX_MAX_VEIN_BLOCKS))
                                 .executes(context -> {
                                     int newValue = IntegerArgumentType.getInteger(context, "value");
-                                    CapsConfig.SERVER_MAX_VEIN_BLOCKS.set(newValue);
-                                    CapsConfig.SERVER_MAX_VEIN_BLOCKS.save();
+                                    ServerConfig.SERVER_MAX_VEIN_BLOCKS.set(newValue);
+                                    ServerConfig.SERVER_MAX_VEIN_BLOCKS.save();
                                     context.getSource().sendSuccess(() -> Component.translatable("caps.command.server_max_vein_blocks", newValue), true);
                                     return 1;
                                 })
