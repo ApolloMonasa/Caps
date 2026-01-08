@@ -88,7 +88,7 @@ public class CapsColorScreen extends Screen {
                 this.r = c.getRed();
                 this.g = c.getGreen();
                 this.b = c.getBlue();
-                this.a = 255; // 调色板默认不透明
+                this.a = CapsConfig.COLOR_A.getDefault(); // 调色板默认不透明
                 refreshAllWidgets();
             }).bounds(colX, colY, 20, 20).build();
 
@@ -111,7 +111,10 @@ public class CapsColorScreen extends Screen {
 
         // Reset (重置) - 重置为默认白色
         this.addRenderableWidget(Button.builder(Component.translatable("controls.reset"), b -> {
-            this.r = 255; this.g = 255; this.b = 255; this.a = 255;
+            this.r = CapsConfig.COLOR_R.getDefault();
+            this.g = CapsConfig.COLOR_G.getDefault();
+            this.b = CapsConfig.COLOR_B.getDefault();
+            this.a = CapsConfig.COLOR_A.getDefault();
             refreshAllWidgets();
         }).bounds(midX - 30, btnY, btnWidth, 20).build());
 

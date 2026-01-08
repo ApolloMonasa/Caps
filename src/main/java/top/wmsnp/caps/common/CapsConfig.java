@@ -36,7 +36,7 @@ public class CapsConfig {
         COLOR_R = CLIENT_BUILDER.defineInRange("color_r", 255, 0, 255);
         COLOR_G = CLIENT_BUILDER.defineInRange("color_g", 255, 0, 255);
         COLOR_B = CLIENT_BUILDER.defineInRange("color_b", 255, 0, 255);
-        COLOR_A = CLIENT_BUILDER.defineInRange("color_a", 200, 0, 255);
+        COLOR_A = CLIENT_BUILDER.defineInRange("color_a", 120, 0, 255);
         CLIENT_BUILDER.pop();
         LINEWIDTH = CLIENT_BUILDER.defineInRange("linewidth", 10F, 1, 40);
         CLIENT_BUILDER.pop();
