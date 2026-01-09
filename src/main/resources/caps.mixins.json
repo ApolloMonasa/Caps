@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "top.wmsnp.caps.mixins",
+  "mixins": [],
+  "client": ["ParticleEngineMixin"],
+  "server": [],
+  "compatibilityLevel": "JAVA_21",
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
