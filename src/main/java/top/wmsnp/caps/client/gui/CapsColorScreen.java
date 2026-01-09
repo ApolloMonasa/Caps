@@ -33,7 +33,7 @@ public class CapsColorScreen extends Screen {
     private boolean isUpdating = false;
 
     public CapsColorScreen(Screen lastScreen) {
-        super(Component.translatable("caps.gui.title"));
+        super(Component.literal("color_title"));
         this.lastScreen = lastScreen;
         // 初始化读取配置
         this.r = ClientConfig.COLOR_R.get();
@@ -99,7 +99,6 @@ public class CapsColorScreen extends Screen {
         // 计算按钮行的 Y 坐标：调色板下方 60px 处
         int btnY = pY + 60;
         int btnWidth = 60;
-        int spacing = 10;
 
         // 布局： [Cancel]  [Reset]  [Done]
         // 总宽度 = 60*3 + 10*2 = 200，刚好居中

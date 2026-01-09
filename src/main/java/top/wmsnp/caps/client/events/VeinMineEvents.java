@@ -14,7 +14,10 @@ import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import top.wmsnp.caps.Caps;
+import top.wmsnp.caps.client.ClientEvents;
 import top.wmsnp.caps.client.ModKeyBindings;
+import top.wmsnp.caps.client.adapters.Adapters;
+import top.wmsnp.caps.client.adapters.IrisAdapter;
 import top.wmsnp.caps.client.renderer.IVeinRenderer;
 import top.wmsnp.caps.client.renderer.RenderMode;
 import top.wmsnp.caps.client.renderer.VeinFaceRenderer;
@@ -45,10 +48,8 @@ public class VeinMineEvents {
     public static void onRenderGui(RenderGuiEvent.Post event) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || mc.level == null || !ModKeyBindings.VEIN_MINE.isDown()) return;
-        if (last == null) return;
-        int count = last.poss.size();
-        if (count == 0) return;
-        MutableComponent text = Component.translatable("caps.gui.vein_mine_count", count);
+        if (last == null || last.poss.isEmpty()) return;
+        MutableComponent text = Component.translatable("caps.gui.vein_mine_count", last.poss.size());
         GuiGraphics graphics = event.getGuiGraphics();
         int x = graphics.guiWidth() / 2 + 10;
         int y = graphics.guiHeight() / 2 + 10;
@@ -59,6 +60,7 @@ public class VeinMineEvents {
 
     @SubscribeEvent
     public static void onRenderWorldLast(RenderLevelStageEvent.AfterOpaqueBlocks event) {
+        if (Adapters.hasIris()) IrisAdapter.handleIrisPipeline(ClientEvents.COLOR_PIPELINE);
         IVeinRenderer renderer = RENDERERS.get(ClientConfig.RENDER_MODE.get());
         if (renderer == null) return;
         Minecraft mc = Minecraft.getInstance();
@@ -72,7 +74,7 @@ public class VeinMineEvents {
             int min = Math.min(ClientConfig.MAX_VEIN_BLOCKS.get(), ServerConfig.SERVER_MAX_VEIN_BLOCKS.get());
             last = VeinMine.collect(mc.player, pos, mc.level.getBlockState(pos), min, false);
         }
-        if (last.poss.size() <= 1) return;
-        renderer.render(VeinMineEvents.last.poss, event.getPoseStack(), mc.gameRenderer.getMainCamera().position(), mc.renderBuffers().bufferSource());
+        if (last.poss.isEmpty()) return;
+        renderer.render(last.poss, event.getPoseStack());
     }
 }
