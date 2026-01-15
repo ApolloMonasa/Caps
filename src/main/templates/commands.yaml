@@ -1,0 +1,8 @@
+$base: top.wmsnp.caps
+
+caps:
+  /requires: LEVEL_GAMEMASTERS
+  set:
+    max:
+      $value int[0, .Caps.MAX_MAX_VEIN_BLOCKS]:
+        /executes: .server.ModCommands#setMaxCommand
