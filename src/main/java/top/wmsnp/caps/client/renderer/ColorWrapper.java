@@ -26,5 +26,4 @@ public class ColorWrapper implements VertexConsumer {
     @Override public @NonNull VertexConsumer setUv2(int u, int v) { return parent.setUv2(u, v); }
     @Override public @NonNull VertexConsumer setNormal(float x, float y, float z) { return parent.setNormal(x, y, z); }
     @Override public @NonNull VertexConsumer setUv1(int i, int i1) { return parent.setUv1(i, i1); }
-    @Override public @NonNull VertexConsumer setLineWidth(float v) { return parent.setLineWidth(v); }
 }

@@ -35,10 +35,10 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 neoForge {
     version = project.neo_version
-    parchment {
-        mappingsVersion = project.parchment_mappings_version
-        minecraftVersion = project.parchment_minecraft_version
-    }
+//    parchment {
+//        mappingsVersion = project.parchment_mappings_version
+//        minecraftVersion = project.parchment_minecraft_version
+//    }
 
     runs {
         client {
@@ -86,6 +86,7 @@ configurations {
 
 dependencies {
     compileOnly "maven.modrinth:iris:${iris_version}+${minecraft_version}-neoforge"
+    compileOnly "org.jspecify:jspecify:1.0.0"
     localRuntime "maven.modrinth:sodium:mc${minecraft_version}-${sodium_version}-neoforge"
     localRuntime "maven.modrinth:iris:${iris_version}+${minecraft_version}-neoforge"
 }

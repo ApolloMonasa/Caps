@@ -5,7 +5,7 @@ import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -22,7 +22,7 @@ import top.wmsnp.caps.client.gui.ConfigSectionScreen;
 @EventBusSubscriber(modid = Caps.MODID, value = Dist.CLIENT)
 public class ClientEvents {
     public static final RenderPipeline.Snippet COLOR_SNIPPET = RenderPipeline.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET).withVertexShader("core/position_color").withFragmentShader("core/position_color").withBlend(BlendFunction.TRANSLUCENT).withDepthWrite(false).withVertexFormat(DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.QUADS).buildSnippet();
-    public static final RenderPipeline COLOR_PIPELINE = RenderPipeline.builder(COLOR_SNIPPET).withLocation(Identifier.fromNamespaceAndPath(Caps.MODID, "pipeline/color")).build();
+    public static final RenderPipeline COLOR_PIPELINE = RenderPipeline.builder(COLOR_SNIPPET).withLocation(ResourceLocation.fromNamespaceAndPath(Caps.MODID, "pipeline/color")).build();
 
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {

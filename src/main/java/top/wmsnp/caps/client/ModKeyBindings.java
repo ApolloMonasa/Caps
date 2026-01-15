@@ -3,7 +3,7 @@ package top.wmsnp.caps.client;
 import net.neoforged.api.distmarker.Dist;
 import top.wmsnp.caps.Caps;
 import net.minecraft.client.KeyMapping;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
@@ -11,7 +11,7 @@ import org.lwjgl.glfw.GLFW;
 
 @EventBusSubscriber(modid = "caps", value = Dist.CLIENT)
 public class ModKeyBindings {
-    public static final KeyMapping.Category CATEGORY = new KeyMapping.Category(Identifier.fromNamespaceAndPath(Caps.MODID, "default"));
+    public static final KeyMapping.Category CATEGORY = new KeyMapping.Category(ResourceLocation.fromNamespaceAndPath(Caps.MODID, "default"));
     public static final KeyMapping VEIN_MINE = new KeyMapping("key.caps.vein_mine", GLFW.GLFW_KEY_GRAVE_ACCENT, CATEGORY);
 
     @SubscribeEvent
