@@ -9,14 +9,13 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 import org.jspecify.annotations.NonNull;
 
 public record VeinMinePayload(boolean isPressed, int maxVeinBlocks) implements CustomPacketPayload {
-    public static final Type<@org.jetbrains.annotations.NotNull VeinMinePayload> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath("caps", "vein_mine_state"));
+    public static final Type<@NonNull VeinMinePayload> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath("caps", "vein_mine_state"));
     public static final StreamCodec<FriendlyByteBuf, VeinMinePayload> CODEC = StreamCodec.composite(
             ByteBufCodecs.BOOL, VeinMinePayload::isPressed,
             ByteBufCodecs.VAR_INT, VeinMinePayload::maxVeinBlocks,
             VeinMinePayload::new);
 
-    @Override
-    public @NonNull Type<@org.jetbrains.annotations.NotNull VeinMinePayload> type() { return TYPE; }
+    @Override public @NonNull Type<@NonNull VeinMinePayload> type() { return TYPE; }
 
     public static void handle(VeinMinePayload payload, IPayloadContext context) {
         var data = context.player().getPersistentData();

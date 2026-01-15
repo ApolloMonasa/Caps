@@ -60,7 +60,7 @@ public class VeinMineEvents {
 
     @SubscribeEvent
     public static void onRenderWorldLast(RenderLevelStageEvent.AfterOpaqueBlocks event) {
-//        if (Adapters.hasIris()) IrisAdapter.handleIrisPipeline(ClientEvents.COLOR_PIPELINE);
+        if (Adapters.hasIris()) IrisAdapter.handleIrisPipeline(ClientEvents.COLOR_PIPELINE);
         IVeinRenderer renderer = RENDERERS.get(ClientConfig.RENDER_MODE.get());
         if (renderer == null) return;
         Minecraft mc = Minecraft.getInstance();

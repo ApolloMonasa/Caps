@@ -1,5 +1,5 @@
 {
-  "required": false,
+  "required": true,
   "package": "top.wmsnp.caps.mixins",
   "mixins": [],
   "client": ["ParticleEngineMixin"],
