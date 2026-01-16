@@ -1,4 +1,11 @@
-# ⛏️ Caps - Vein Mining (连锁挖矿)
+# ⛏️ Caps - Vein Mining
+[![GitHub Stars](https://img.shields.io/github/stars/ApolloMonasa/Caps?style=flat&logo=github&color=boldgreen)](https://github.com/ApolloMonasa/Caps/stargazers)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Language](https://img.shields.io/badge/Language-Java-ED8B00?style=flat&logo=openjdk&logoColor=white)](https://www.java.com)
+[![NeoForge](https://img.shields.io/badge/ModLoader-NeoForge-EF5A29?style=flat&logo=curseforge&logoColor=white)](https://neoforged.net/)
+
+![](https://img.shields.io/curseforge/dt/1419640?logo=curseforge&label=CurseForge&color=orange)
+![](https://img.shields.io/modrinth/dt/VOj41dSK?logo=modrinth&label=Modrinth&color=00AF5C)
 
 **Caps** is a lightweight, modern vein mining mod designed for **Minecraft 1.21+ (NeoForge)**. It allows you to mine entire veins of ores or chop down whole trees instantly by holding a key, saving you time and effort while maintaining vanilla balance.
 
@@ -42,7 +49,7 @@
 * **可视化提示**：当按住按键时，会高亮显示即将被连锁破坏的方块。
 
 ### 🔎 PCL 搜索关键词
-如果想在 PCL 启动器中下载，请搜索：`Caps` 或 `连锁挖矿`。
+如果想在 PCL 启动器中下载，请搜索：`Caps` 或 `连锁采集`。
 
 ---
 
