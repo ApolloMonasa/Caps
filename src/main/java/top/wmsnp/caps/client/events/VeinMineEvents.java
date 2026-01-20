@@ -12,7 +12,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
-import net.neoforged.neoforge.client.network.ClientPacketDistributor;
+import net.neoforged.neoforge.network.PacketDistributor;
 import top.wmsnp.caps.Caps;
 import top.wmsnp.caps.client.ClientEvents;
 import top.wmsnp.caps.client.ModKeyBindings;
@@ -40,7 +40,7 @@ public class VeinMineEvents {
         boolean currentState = ModKeyBindings.VEIN_MINE.isDown();
         if (currentState != lastState) {
             lastState = currentState;
-            ClientPacketDistributor.sendToServer(new VeinMinePayload(currentState, ClientConfig.MAX_VEIN_BLOCKS.get()));
+            PacketDistributor.sendToServer(new VeinMinePayload(currentState, ClientConfig.MAX_VEIN_BLOCKS.get()));
         }
     }
 
