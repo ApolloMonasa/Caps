@@ -21,7 +21,7 @@ import top.wmsnp.caps.client.gui.ConfigSectionScreen;
 
 @EventBusSubscriber(modid = Caps.MODID, value = Dist.CLIENT)
 public class ClientEvents {
-    public static final RenderPipeline.Snippet COLOR_SNIPPET = RenderPipeline.builder(RenderPipelines.MATRICES_PROJECTION_SNIPPET).withVertexShader("core/position_color").withFragmentShader("core/position_color").withBlend(BlendFunction.TRANSLUCENT).withDepthWrite(false).withVertexFormat(DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.QUADS).buildSnippet();
+    public static final RenderPipeline.Snippet COLOR_SNIPPET = RenderPipeline.builder(RenderPipelines.MATRICES_COLOR_SNIPPET).withVertexShader("core/position_color").withFragmentShader("core/position_color").withBlend(BlendFunction.TRANSLUCENT).withDepthWrite(false).withVertexFormat(DefaultVertexFormat.POSITION_COLOR, VertexFormat.Mode.QUADS).buildSnippet();
     public static final RenderPipeline COLOR_PIPELINE = RenderPipeline.builder(COLOR_SNIPPET).withLocation(ResourceLocation.fromNamespaceAndPath(Caps.MODID, "pipeline/color")).build();
 
     @SubscribeEvent

@@ -15,7 +15,7 @@ public class VeinFaceRenderer implements IVeinRenderer {
     public void render(List<BlockPos> blocks, PoseStack poseStack) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.level == null) return;
-        Vec3 cameraPos = mc.gameRenderer.getMainCamera().position();
+        Vec3 cameraPos = mc.gameRenderer.getMainCamera().getPosition();
         BlockRenderDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
         VertexConsumer builder = new ColorWrapper(mc.renderBuffers().bufferSource().getBuffer(RENDER_TYPE), getColor());
         for (BlockPos pos : blocks) {

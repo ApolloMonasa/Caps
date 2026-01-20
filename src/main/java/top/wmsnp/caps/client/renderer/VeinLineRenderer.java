@@ -29,7 +29,7 @@ public class VeinLineRenderer implements IVeinRenderer {
         final Set<BlockPos> blockSet = new HashSet<>(blocks);
         final float t = (float) getLinewidth();
         final int color = getColor();
-        final Vec3 cameraPos = Minecraft.getInstance().gameRenderer.getMainCamera().position();
+        final Vec3 cameraPos = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
         final Matrix4f matrix = poseStack.last().pose();
         final VertexConsumer builder = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(RENDER_TYPE);
 

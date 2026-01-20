@@ -33,7 +33,7 @@ public class VeinMine {
         Level level = player.level();
         Block targetBlock = state.getBlock();
         VeinMineResult result = new VeinMineResult(startPos);
-        if (state.isAir() || state.getFluidState().isSource() || !player.hasCorrectToolForDrops(state, level, startPos)) return result;
+        if (state.isAir() || state.getFluidState().isSource() || !(player.hasCorrectToolForDrops(state, level, startPos) || player.isCreative())) return result;
 
         Queue<BlockPos> queue = new LinkedList<>();
         Set<BlockPos> visited = new HashSet<>();
@@ -70,11 +70,12 @@ public class VeinMine {
     }
 
     public static void veinMine(ServerPlayer player, BlockPos startPos, BlockState state) {
-        ServerLevel level = player.level();
+        Level level = player.level();
+        if (!(level instanceof ServerLevel)) return;
         int min = Math.min(player.getPersistentData().getInt("vein_mine_max").orElse(64),  ServerConfig.SERVER_MAX_VEIN_BLOCKS.get());
         VeinMineResult result = collect(player, startPos, state, min, true);
         if (player.isCreative()) return;
-        ExperienceOrb.award(level, startPos.getCenter(), result.xp);
+        ExperienceOrb.award((ServerLevel) level, startPos.getCenter(), result.xp);
         result.drops.forEach(drop -> Block.popResource(level, startPos, drop));
     }
 }

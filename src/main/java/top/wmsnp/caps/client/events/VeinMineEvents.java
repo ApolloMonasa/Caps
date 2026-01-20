@@ -59,7 +59,8 @@ public class VeinMineEvents {
     }
 
     @SubscribeEvent
-    public static void onRenderWorldLast(RenderLevelStageEvent.AfterOpaqueBlocks event) {
+    public static void onRenderWorldLast(RenderLevelStageEvent event) {
+        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_TRIPWIRE_BLOCKS) return;
         if (Adapters.hasIris()) IrisAdapter.handleIrisPipeline(ClientEvents.COLOR_PIPELINE);
         IVeinRenderer renderer = RENDERERS.get(ClientConfig.RENDER_MODE.get());
         if (renderer == null) return;
