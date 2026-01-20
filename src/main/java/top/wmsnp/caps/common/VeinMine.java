@@ -33,7 +33,7 @@ public class VeinMine {
         Level level = player.level();
         Block targetBlock = state.getBlock();
         VeinMineResult result = new VeinMineResult(startPos);
-        if (state.isAir() || state.getFluidState().isSource() || !player.hasCorrectToolForDrops(state, level, startPos)) return result;
+        if (state.isAir() || state.getFluidState().isSource() || !(player.hasCorrectToolForDrops(state, level, startPos) || player.isCreative())) return result;
 
         Queue<BlockPos> queue = new LinkedList<>();
         Set<BlockPos> visited = new HashSet<>();
