@@ -4,7 +4,7 @@ plugins {
     id 'net.neoforged.moddev' version '2.0.136'
     id 'idea'
     id 'top.wmsnp.librarian' version '0.1.0'
-    id 'top.wmsnp.brigadier' version '0.1.0'
+    id 'top.wmsnp.brigadier' version '0.1.1'
 }
 
 tasks.named('wrapper', Wrapper).configure {
@@ -16,7 +16,7 @@ group = mod_group_id
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 base {
-    archivesName = mod_id
+    archivesName = "${mod_id}-${minecraft_version_range}-${mod_version}"
 }
 
 librarian {
