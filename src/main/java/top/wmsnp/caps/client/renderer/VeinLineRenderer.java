@@ -3,7 +3,6 @@ package top.wmsnp.caps.client.renderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -35,7 +34,7 @@ public class VeinLineRenderer implements IVeinRenderer {
         final int color = getColor();
         final Vec3 cameraPos = Minecraft.getInstance().gameRenderer.getMainCamera().getPosition();
         final Matrix4f matrix = poseStack.last().pose();
-        final VertexConsumer builder = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(RenderType.debugQuads());
+        final VertexConsumer builder = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(RENDER_TYPE);
 
         for (BlockPos pos : blocks) {
             Vec3 center = pos.getCenter().subtract(cameraPos);
