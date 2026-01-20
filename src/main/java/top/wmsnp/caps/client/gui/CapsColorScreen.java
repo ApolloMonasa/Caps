@@ -4,13 +4,13 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.CommonComponents; // 引入通用组件(Done/Cancel)
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.client.gui.widget.ExtendedSlider;
 import org.jspecify.annotations.NonNull;
 import top.wmsnp.caps.common.ClientConfig;
 
-import java.awt.Color;
+import java.awt.*;
 
 public class CapsColorScreen extends Screen {
     private final Screen lastScreen;

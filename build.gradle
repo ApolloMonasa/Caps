@@ -11,21 +11,14 @@ tasks.named('wrapper', Wrapper).configure {
     distributionType = Wrapper.DistributionType.BIN
 }
 
-version = mod_version
-group = mod_group_id
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 base {
-    archivesName = mod_id
+    archivesName = "${mod_id}-${minecraft_version_range}-${mod_version}"
 }
 
 dependencies {
     compileOnly "org.jspecify:jspecify:1.0.0"
-}
-
-librarian {
-    mod("sodium", "clientRuntimeOnly")
-    mod("iris", "compileOnly", "clientRuntimeOnly")
 }
 
 brigadier {
@@ -58,7 +51,7 @@ neoForge {
         }
 
         data {
-            clientData()
+            data()
             programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
         }
 

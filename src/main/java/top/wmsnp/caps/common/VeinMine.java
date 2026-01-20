@@ -72,7 +72,7 @@ public class VeinMine {
     public static void veinMine(ServerPlayer player, BlockPos startPos, BlockState state) {
         Level level = player.level();
         if (!(level instanceof ServerLevel)) return;
-        int min = Math.min(player.getPersistentData().getInt("vein_mine_max").orElse(64),  ServerConfig.SERVER_MAX_VEIN_BLOCKS.get());
+        int min = Math.min(player.getPersistentData().getInt("vein_mine_max"),  ServerConfig.SERVER_MAX_VEIN_BLOCKS.get());
         VeinMineResult result = collect(player, startPos, state, min, true);
         if (player.isCreative()) return;
         ExperienceOrb.award((ServerLevel) level, startPos.getCenter(), result.xp);

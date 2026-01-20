@@ -14,18 +14,15 @@ import net.neoforged.neoforge.client.event.RenderGuiEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
 import top.wmsnp.caps.Caps;
-import top.wmsnp.caps.client.ClientEvents;
 import top.wmsnp.caps.client.ModKeyBindings;
-import top.wmsnp.caps.client.adapters.Adapters;
-import top.wmsnp.caps.client.adapters.IrisAdapter;
 import top.wmsnp.caps.client.renderer.IVeinRenderer;
 import top.wmsnp.caps.client.renderer.RenderMode;
 import top.wmsnp.caps.client.renderer.VeinFaceRenderer;
 import top.wmsnp.caps.client.renderer.VeinLineRenderer;
 import top.wmsnp.caps.common.ClientConfig;
+import top.wmsnp.caps.common.ServerConfig;
 import top.wmsnp.caps.common.VeinMine;
 import top.wmsnp.caps.network.VeinMinePayload;
-import top.wmsnp.caps.common.ServerConfig;
 
 import java.util.Map;
 
@@ -61,7 +58,6 @@ public class VeinMineEvents {
     @SubscribeEvent
     public static void onRenderWorldLast(RenderLevelStageEvent event) {
         if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_TRIPWIRE_BLOCKS) return;
-        if (Adapters.hasIris()) IrisAdapter.handleIrisPipeline(ClientEvents.COLOR_PIPELINE);
         IVeinRenderer renderer = RENDERERS.get(ClientConfig.RENDER_MODE.get());
         if (renderer == null) return;
         Minecraft mc = Minecraft.getInstance();

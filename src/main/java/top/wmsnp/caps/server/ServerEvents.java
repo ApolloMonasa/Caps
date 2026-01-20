@@ -12,7 +12,7 @@ public class ServerEvents {
     @SubscribeEvent
     public static void onBlockBreak(BlockEvent.BreakEvent event) {
         Player player = event.getPlayer();
-        if(!(player instanceof ServerPlayer && player.getPersistentData().getBoolean("vein_mine_active").orElse(false))) return;
+        if(!(player instanceof ServerPlayer && player.getPersistentData().getBoolean("vein_mine_active"))) return;
         VeinMine.veinMine((ServerPlayer) player, event.getPos(), event.getState());
     }
 }

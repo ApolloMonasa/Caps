@@ -1,9 +1,11 @@
 license="${mod_license}"
 issueTrackerURL="https://github.com/ApolloMonasa/Caps/issues"
+modLoader="javafml"
+loaderVersion="[1,)"
 
 [[mods]]
 modId="${mod_id}"
-version="${mod_version}-{minecraft_version}"
+version="${mod_version}-${minecraft_version}"
 displayName="${mod_name}"
 displayURL="https://github.com/ApolloMonasa/Caps"
 logoFile="logo.png"
@@ -17,14 +19,13 @@ Make Gathering Great Again!
 config="${mod_id}.mixins.json"
 
 [[dependencies.${mod_id}]]
-    modId="neoforge"
-    type="required"
-    versionRange="[${neo_version},)"
-    ordering="NONE"
-    side="BOTH"
+modId="neoforge"
+type="required"
+ordering="NONE"
+side="BOTH"
 [[dependencies.${mod_id}]]
-    modId="minecraft"
-    type="required"
-    versionRange="${minecraft_version_range}"
-    ordering="NONE"
-    side="BOTH"
+modId="minecraft"
+type="required"
+versionRange="${minecraft_version_range}"
+ordering="NONE"
+side="BOTH"
