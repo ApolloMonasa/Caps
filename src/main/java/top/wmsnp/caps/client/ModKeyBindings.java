@@ -11,12 +11,10 @@ import org.lwjgl.glfw.GLFW;
 
 @EventBusSubscriber(modid = "caps", value = Dist.CLIENT)
 public class ModKeyBindings {
-    public static final KeyMapping.Category CATEGORY = new KeyMapping.Category(ResourceLocation.fromNamespaceAndPath(Caps.MODID, "default"));
-    public static final KeyMapping VEIN_MINE = new KeyMapping("key.caps.vein_mine", GLFW.GLFW_KEY_GRAVE_ACCENT, CATEGORY);
+    public static final KeyMapping VEIN_MINE = new KeyMapping("key.caps.vein_mine", GLFW.GLFW_KEY_GRAVE_ACCENT, "key.category.caps.default");
 
     @SubscribeEvent
     public static void registerBindings(RegisterKeyMappingsEvent event) {
-        event.registerCategory(CATEGORY);
         event.register(VEIN_MINE);
     }
 }
