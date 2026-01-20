@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix4f;
 
@@ -71,13 +72,14 @@ public class VeinLineRenderer implements IVeinRenderer {
 
     record FaceFrame(Direction face, Vec3 u, Vec3 v, Vec3 n) {
         public static FaceFrame of(Direction face) {
-            Vec3 n = face.getUnitVec3();
+            Vec3i ni = face.getNormal();
+            Vec3 n = new Vec3(ni.getX(), ni.getY(), ni.getZ());
             Vec3 v = (face.getAxis() == Direction.Axis.Y) ? new Vec3(0, 0, face == Direction.UP ? -1 : 1) : new Vec3(0, 1, 0);
             return new FaceFrame(face, v.cross(n), v, n);
         }
         public Vec3 proj(double uC, double vC, double offset) { return n.scale(offset + 0.5).add(u.scale(uC - 0.5)).add(v.scale(vC - 0.5)); }
-        public Direction dirU() { return Direction.getNearest((int)u.x, (int)u.y, (int)u.z, Direction.UP); }
-        public Direction dirV() { return Direction.getNearest((int)v.x, (int)v.y, (int)v.z, Direction.UP); }
+        public Direction dirU() { return Direction.getNearest(u); }
+        public Direction dirV() { return Direction.getNearest(v); }
     }
 
     enum N {
