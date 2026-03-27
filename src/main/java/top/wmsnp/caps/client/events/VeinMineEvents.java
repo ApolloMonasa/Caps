@@ -1,7 +1,7 @@
 package top.wmsnp.caps.client.events;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -23,9 +23,9 @@ import top.wmsnp.caps.client.renderer.RenderMode;
 import top.wmsnp.caps.client.renderer.VeinFaceRenderer;
 import top.wmsnp.caps.client.renderer.VeinLineRenderer;
 import top.wmsnp.caps.common.ClientConfig;
+import top.wmsnp.caps.common.ServerConfig;
 import top.wmsnp.caps.common.VeinMine;
 import top.wmsnp.caps.network.VeinMinePayload;
-import top.wmsnp.caps.common.ServerConfig;
 
 import java.util.Map;
 
@@ -50,12 +50,12 @@ public class VeinMineEvents {
         if (mc.player == null || mc.level == null || !ModKeyBindings.VEIN_MINE.isDown()) return;
         if (last == null || last.poss.isEmpty()) return;
         MutableComponent text = Component.translatable("caps.gui.vein_mine_count", last.poss.size());
-        GuiGraphics graphics = event.getGuiGraphics();
+        GuiGraphicsExtractor graphics = event.getGuiGraphics();
         int x = graphics.guiWidth() / 2 + 10;
         int y = graphics.guiHeight() / 2 + 10;
         int width = mc.font.width(text);
         graphics.fill(x - 2, y - 2, x + width + 2, y + mc.font.lineHeight + 2, 0x60000000);
-        graphics.drawString(mc.font, text, x, y, 0xFFFFFFFF);
+        graphics.text(mc.font, text, x, y, 0xFFFFFFFF);
     }
 
     @SubscribeEvent

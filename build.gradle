@@ -13,7 +13,7 @@ tasks.named('wrapper', Wrapper).configure {
 
 version = mod_version
 group = mod_group_id
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
 base {
     archivesName = "${mod_id}-${minecraft_version_range}-${mod_version}"
@@ -30,10 +30,6 @@ brigadier {
 
 neoForge {
     version = librarian.loaderVersion
-    parchment {
-        mappingsVersion = project.parchment_mappings_version
-        minecraftVersion = project.parchment_minecraft_version
-    }
 
     runs {
         client {
