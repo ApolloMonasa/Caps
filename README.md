@@ -59,5 +59,13 @@
 
 ## For Devs
 - Please carefully check and custom the proxy in `gradle.properties`
+```
+#代理配置(务必自己根据情况修改)
+systemProp.http.proxyHost=127.0.0.1
+systemProp.http.proxyPort=9098
+systemProp.https.proxyHost=127.0.0.1
+systemProp.https.proxyPort=9098
+```
+
 ---
 *Created by Apollo.*
