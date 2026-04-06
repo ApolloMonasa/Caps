@@ -57,5 +57,7 @@
 * Requires **NeoForge**.
 * Client and Server side are both required for best experience (Key state syncing).
 
+## For Devs
+- Please carefully check and custom the proxy in `gradle.properties`
 ---
 *Created by Apollo.*
